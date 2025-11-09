@@ -57,13 +57,33 @@
               <h5 class="card-title">Extracted Text</h5>
 
               {% if extracted_text %}
-                <form method="post" action="/download">
-                  <div class="mb-3">
-                    <textarea name="extracted_text" class="form-control" rows="18">{{ extracted_text }}</textarea>
-                  </div>
-                  <input type="hidden" name="filename" value="{{ filename }}">
-                  <button class="btn btn-success" type="submit">Download Extracted Text</button>
+                <form class="mb-3">
+                  <textarea name="extracted_text_display" class="form-control" rows="18" readonly>{{ extracted_text }}</textarea>
                 </form>
+                
+                <div class="d-flex flex-wrap gap-2">
+                  
+                  <form method="post" action="{{ url_for('download') }}" class="d-inline">
+                      <input type="hidden" name="extracted_text" value="{{ extracted_text }}">
+                      <input type="hidden" name="filename" value="{{ filename }}">
+                      <input type="hidden" name="file_type" value="txt">
+                      <button class="btn btn-success" type="submit">Download as TXT</button>
+                  </form>
+
+                  <form method="post" action="{{ url_for('download') }}" class="d-inline">
+                      <input type="hidden" name="extracted_text" value="{{ extracted_text }}">
+                      <input type="hidden" name="filename" value="{{ filename }}">
+                      <input type="hidden" name="file_type" value="docx">
+                      <button class="btn btn-info" type="submit">Download as Word (DOCX)</button>
+                  </form>
+
+                  <form method="post" action="{{ url_for('download') }}" class="d-inline">
+                      <input type="hidden" name="extracted_text" value="{{ extracted_text }}">
+                      <input type="hidden" name="filename" value="{{ filename }}">
+                      <input type="hidden" name="file_type" value="xlsx">
+                      <button class="btn btn-warning" type="submit">Download as Excel (XLSX)</button>
+                  </form>
+                </div>
               {% else %}
                 <p class="text-muted">No OCR results yet. Upload an image to get started.</p>
               {% endif %}
@@ -76,4 +96,4 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
-  </html>
+</html>
