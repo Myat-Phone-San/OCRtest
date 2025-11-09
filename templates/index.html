@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trade Document OCR Scanner (Flask)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Trade Document OCR</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, msg in messages %}
+            <div class="alert alert-{{ category }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="row">
+        <div class="col-md-5">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Upload Document</h5>
+              <p class="text-muted">Upload a JPG/PNG image (invoice, bill of lading, manifest)</p>
+
+              <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <input class="form-control" type="file" name="file" accept="image/*" required>
+                </div>
+                <button class="btn btn-primary" type="submit">Run OCR</button>
+              </form>
+
+              <hr>
+              
+            </div>
+          </div>
+
+          {% if image_data %}
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title">Preview</h6>
+              <img src="{{ image_data }}" class="img-fluid" alt="Uploaded image">
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col-md-7">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Extracted Text</h5>
+
+              {% if extracted_text %}
+                <form method="post" action="/download">
+                  <div class="mb-3">
+                    <textarea name="extracted_text" class="form-control" rows="18">{{ extracted_text }}</textarea>
+                  </div>
+                  <input type="hidden" name="filename" value="{{ filename }}">
+                  <button class="btn btn-success" type="submit">Download Extracted Text</button>
+                </form>
+              {% else %}
+                <p class="text-muted">No OCR results yet. Upload an image to get started.</p>
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>
